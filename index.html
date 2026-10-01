@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#171815" />
-    <title>Segno — Music You Come Back To.</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="LoginSignup.js" defer></script>
-    <script src="index.js" defer></script>
-    <script src="LoggedIn.js" defer></script>
-    <script src="Signedup.js" defer></script>
+    <title>Segno — Music for the moment</title>
+    <link rel="stylesheet" href="CSS/style.css" />
+    <script src="JavaScript/LoginSignup.js" defer></script>
+    <script src="JavaScript/index.js" defer></script>
+    <script src="React/LoggedIn.js" defer></script>
+    <script src="React/Signedup.js" defer></script>
   </head>
   <body>
     <div class="announcement">
@@ -20,7 +20,7 @@
       ><a class="logo" href="#home">Segno<b>.</b></a>
       <nav class="nav" id="nav">
         <a href="#collections">Collections</a><a href="#shop">Sheet music</a
-        ><a href="#about">Our philosophy</a>
+        ><a href="#about">Our philosophy</a><a href="#inquiries">Inquiries</a>
       </nav>
       <div class="right">
         <div class="social">
@@ -113,10 +113,56 @@
         </div>
         <div class="products" id="products"></div>
       </section>
+      <section class="intro" id="inquiries">
+        <div class="eyebrow">Questions & commissions</div>
+        <h2>Let's talk about your music.</h2>
+        <p>
+          Have a question about a score, a custom arrangement, or a performance?
+          Send us a note and we'll get back to you by email.
+        </p>
+        <form
+          action="mailto:justo.ejay.silva1@gmail.com"
+          method="post"
+          enctype="text/plain"
+          style="max-width: 620px; margin: 2rem auto 0; text-align: left;"
+        >
+          <label for="inquiryName">Name</label>
+          <input
+            class="search"
+            id="inquiryName"
+            name="Name"
+            type="text"
+            placeholder="Your name"
+            required
+            style="display: block; width: 100%; margin: 0.5rem 0 1rem;"
+          />
+          <label for="inquiryEmail">Email</label>
+          <input
+            class="search"
+            id="inquiryEmail"
+            name="Email"
+            type="email"
+            placeholder="you@example.com"
+            required
+            style="display: block; width: 100%; margin: 0.5rem 0 1rem;"
+          />
+          <label for="inquiryMessage">Message</label>
+          <textarea
+            class="search"
+            id="inquiryMessage"
+            name="Message"
+            rows="5"
+            placeholder="How can we help?"
+            required
+            style="display: block; width: 100%; margin: 0.5rem 0 1.25rem; resize: vertical;"
+          ></textarea>
+          <button class="gold-button" type="submit">Send inquiry ↗</button>
+        </form>
+      </section>
       <section class="quote">
         <div class="eyebrow">The Man behind the music</div>
         <div class="quote-image">
-          <image src="Gemini_Generated_Image_k4zdtqk4zdtqk4zd.jpg" alt="EjayJusto" />
+          <image src="Images/Gemini_Generated_Image_k4zdtqk4zdtqk4zd.jpg" alt="EjayJusto" />
         </div>
         <blockquote>
           “Music is a language that expresses the emotions, the moment, and the soul of a musician.”
