@@ -149,7 +149,7 @@
         }
       }
       localStorage.setItem(SESSION_KEY, JSON.stringify({ email }));
-      window.location.href = "0039JustoMyWebPage.html";
+      window.location.href = "index.html";
     } catch (error) {
       message.textContent =
         error && error.message
