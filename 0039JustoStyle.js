@@ -9,7 +9,7 @@ const data = [
   },
   {
     id: 2,
-    title: "To A Kinder World",
+    title: "Mia and Sebastian's Theme by Justin Hurwitz",
     category: "Marimba",
     kind: "Solo arrangement",
     level: "Intermediate · 4 mallets",
@@ -80,6 +80,7 @@ const data = [
     price: 30,
   },
 ];
+
 const slides = [
   {
     name: "Marimba",
@@ -103,107 +104,209 @@ const slides = [
     href: "#ensemble",
   },
 ];
-let slide = 0,
-  filter = "all",
-  bag = [];
+
+let slide = 0;
+let filter = "all";
+let bag = [];
+
 const productBox = document.getElementById("products");
-function render() {
-  let q = document.getElementById("search").value.toLowerCase().trim();
-  let list = data.filter(
-    (p) =>
-      (filter === "all" || p.category === filter) &&
-      `${p.title} ${p.category} ${p.kind} ${p.level}`.toLowerCase().includes(q),
+const getId = (id) => document.getElementById(id);
+
+function getLoggedInUser() {
+  try {
+    const session = JSON.parse(localStorage.getItem("segnoSession") || "null");
+    if (!session || typeof session.email !== "string") return null;
+
+    const users = JSON.parse(localStorage.getItem("segnoUsers") || "{}");
+    return users && typeof users === "object" ? users[session.email] || null : null;
+  } catch {
+    return null;
+  }
+}
+
+function updateLoggedInGreeting() {
+  const user = getLoggedInUser();
+  const greetingNode = getId("SignUpLogin");
+
+  if (!greetingNode || !user) return;
+
+  const name = user.name || user.email;
+  greetingNode.textContent = `Welcome, ${name}`;
+  greetingNode.setAttribute("aria-label", `Account for ${name}`);
+}
+
+function getFilteredProducts() {
+  const searchInput = getId("search");
+  const query = searchInput ? searchInput.value.toLowerCase().trim() : "";
+
+  return data.filter(
+    (product) =>
+      (filter === "all" || product.category === filter) &&
+      `${product.title} ${product.category} ${product.kind} ${product.level}`
+        .toLowerCase()
+        .includes(query),
   );
+}
+
+function productCardMarkup(product) {
+  const cardId =
+    product.category === "Percussion Ensemble"
+      ? "ensemble"
+      : product.category.toLowerCase();
+
+  return `
+    <article class="card" id="${cardId}">
+      <div class="art">
+        <label>Digital score</label>
+        <span>${product.title.toUpperCase()}</span>
+      </div>
+      <div class="info">
+        <div class="type">${product.category} · ${product.kind}</div>
+        <h3>${product.title}</h3>
+        <div class="details">${product.level}</div>
+        <div class="purchase">
+          <span>$${product.price.toFixed(2)}</span>
+          <button class="add" data-add="${product.id}">Add to bag +</button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function render() {
+  if (!productBox) return;
+
+  const list = getFilteredProducts();
+
   productBox.innerHTML = list.length
-    ? list
-        .map(
-          (p) =>
-            `<article class="card" id="${p.category === "Percussion Ensemble" ? "ensemble" : p.category.toLowerCase()}"><div class="art"><label>Digital score</label><span>${p.title.toUpperCase()}</span></div><div class="info"><div class="type">${p.category} · ${p.kind}</div><h3>${p.title}</h3><div class="details">${p.level}</div><div class="purchase"><span>$${p.price.toFixed(2)}</span><button class="add" data-add="${p.id}">Add to bag +</button></div></div></article>`,
-        )
-        .join("")
+    ? list.map(productCardMarkup).join("")
     : '<div class="empty">No scores found. Try another title or collection.</div>';
 }
+
 function choose(value) {
   filter = value;
+
   document
     .querySelectorAll(".filter")
-    .forEach((b) => b.classList.toggle("active", b.dataset.filter === value));
-  document.getElementById("shopTitle").textContent =
-    value === "all" ? "Music that you come back to." : `${value} scores.`;
+    .forEach((button) =>
+      button.classList.toggle("active", button.dataset.filter === value),
+    );
+
+  const shopTitle = getId("shopTitle");
+  if (shopTitle) {
+    shopTitle.textContent =
+      value === "all" ? "Music that you come back to." : `${value} scores.`;
+  }
+
   render();
 }
+
 function showSlide(n) {
   slide = (n + slides.length) % slides.length;
-  let s = slides[slide];
-  document.getElementById("eyebrow").textContent = s.eyebrow;
-  document.getElementById("title").innerHTML = s.title;
-  document.getElementById("description").textContent = s.text;
-  document.getElementById("heroLink").href = s.href;
-  document.getElementById("heroLink").textContent =
-    `Explore ${s.name.toLowerCase()} scores ↗`;
-  document.getElementById("slideNumber").textContent = `0${slide + 1}`;
+  const activeSlide = slides[slide];
+  const eyebrow = getId("eyebrow");
+  const title = getId("title");
+  const description = getId("description");
+  const heroLink = getId("heroLink");
+  const slideNumber = getId("slideNumber");
+
+  if (eyebrow) eyebrow.textContent = activeSlide.eyebrow;
+  if (title) title.innerHTML = activeSlide.title;
+  if (description) description.textContent = activeSlide.text;
+  if (heroLink) {
+    heroLink.href = activeSlide.href;
+    heroLink.textContent = `Explore ${activeSlide.name.toLowerCase()} scores ↗`;
+  }
+  if (slideNumber) slideNumber.textContent = `0${slide + 1}`;
 }
+
+function bagItemMarkup(item) {
+  return `
+    <div class="item">
+      <div>
+        <strong>${item.title}</strong>
+        <small>${item.category} · Qty ${item.qty}</small>
+      </div>
+      <div>
+        $${(item.price * item.qty).toFixed(2)}<br>
+        <button class="remove" data-remove="${item.id}">Remove</button>
+      </div>
+    </div>
+  `;
+}
+
 function updateBag() {
-  let qty = bag.reduce((n, p) => n + p.qty, 0);
+  const qty = bag.reduce((total, item) => total + item.qty, 0);
+  const totalAmount = bag.reduce((total, item) => total + item.price * item.qty, 0);
+
   document.getElementById("count").textContent = `(${qty})`;
   document.getElementById("drawerCount").textContent = `(${qty})`;
-  document.getElementById("total").textContent =
-    "$" + bag.reduce((n, p) => n + p.price * p.qty, 0).toFixed(2);
+  document.getElementById("total").textContent = "$" + totalAmount.toFixed(2);
   document.getElementById("items").innerHTML = bag.length
-    ? bag
-        .map(
-          (p) =>
-            `<div class="item"><div><strong>${p.title}</strong><small>${p.category} · Qty ${p.qty}</small></div><div>$${(p.price * p.qty).toFixed(2)}<br><button class="remove" data-remove="${p.id}">Remove</button></div></div>`,
-        )
-        .join("")
+    ? bag.map(bagItemMarkup).join("")
     : '<p style="margin:15px;padding:0;text-align:center;color:#76766f;font-size:13px">Your bag is waiting for its first score.</p>';
 }
+
 function cart(open) {
   document.getElementById("drawer").classList.toggle("open", open);
   document.getElementById("overlay").classList.toggle("open", open);
 }
+
 function message(text) {
-  let n = document.getElementById("notice");
-  n.textContent = text;
-  n.classList.add("show");
-  setTimeout(() => n.classList.remove("show"), 1900);
+  const notice = document.getElementById("notice");
+  notice.textContent = text;
+  notice.classList.add("show");
+  setTimeout(() => notice.classList.remove("show"), 1900);
 }
+
 document.getElementById("prev").onclick = () => showSlide(slide - 1);
 document.getElementById("next").onclick = () => showSlide(slide + 1);
 document.getElementById("heroLink").onclick = () => choose(slides[slide].name);
-document
-  .querySelectorAll(".collection a")
-  .forEach(
-    (a) =>
-      (a.onclick = () =>
-        choose(
-          a.hash === "#ensemble"
-            ? "Percussion Ensemble"
-            : a.hash === "#drumline"
-              ? "Drumline"
-              : "Marimba",
-        )),
-  );
-document
-  .querySelectorAll(".filter")
-  .forEach((b) => (b.onclick = () => choose(b.dataset.filter)));
+
+document.querySelectorAll(".collection a").forEach(
+  (link) =>
+    (link.onclick = () =>
+      choose(
+        link.hash === "#ensemble"
+          ? "Percussion Ensemble"
+          : link.hash === "#drumline"
+            ? "Drumline"
+            : "Marimba",
+      )),
+);
+
+document.querySelectorAll(".filter").forEach(
+  (button) => (button.onclick = () => choose(button.dataset.filter)),
+);
+
 document.getElementById("search").addEventListener("input", render);
-productBox.addEventListener("click", (e) => {
-  let p = data.find((x) => x.id === Number(e.target.dataset.add));
-  if (!p) return;
-  let item = bag.find((x) => x.id === p.id);
-  if (item) item.qty++;
-  else bag.push({ ...p, qty: 1 });
+
+productBox.addEventListener("click", (event) => {
+  const product = data.find((item) => item.id === Number(event.target.dataset.add));
+
+  if (!product) return;
+
+  const existingItem = bag.find((item) => item.id === product.id);
+
+  if (existingItem) {
+    existingItem.qty += 1;
+  } else {
+    bag.push({ ...product, qty: 1 });
+  }
+
   updateBag();
-  message(`${p.title} added to your bag`);
+  message(`${product.title} added to your bag`);
 });
-document.getElementById("items").onclick = (e) => {
-  let id = Number(e.target.dataset.remove);
+
+document.getElementById("items").onclick = (event) => {
+  const id = Number(event.target.dataset.remove);
+
   if (id) {
-    bag = bag.filter((p) => p.id !== id);
+    bag = bag.filter((item) => item.id !== id);
     updateBag();
   }
 };
+
 document.getElementById("openCart").onclick = () => cart(true);
 document.getElementById("close").onclick = () => cart(false);
 document.getElementById("overlay").onclick = () => cart(false);
@@ -213,15 +316,16 @@ document.getElementById("checkout").onclick = () =>
       ? "Checkout is coming soon. Your scores are saved."
       : "Add a score to your bag to get started.",
   );
+
 document.getElementById("menu").onclick = () =>
   document.getElementById("nav").classList.toggle("open");
-document
-  .querySelectorAll("#nav a")
-  .forEach(
-    (a) =>
-      (a.onclick = () =>
-        document.getElementById("nav").classList.remove("open")),
-  );
+
+document.querySelectorAll("#nav a").forEach(
+  (link) =>
+    (link.onclick = () => document.getElementById("nav").classList.remove("open")),
+);
+
 render();
 updateBag();
+updateLoggedInGreeting();
 setInterval(() => showSlide(slide + 1), 7000);
