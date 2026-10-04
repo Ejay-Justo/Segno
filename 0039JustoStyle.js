@@ -9,7 +9,7 @@ const data = [
   },
   {
     id: 2,
-    title: "Mia and Sebastian's Theme by Justin Hurwitz",
+    title: "To A Kinder World",
     category: "Marimba",
     kind: "Solo arrangement",
     level: "Intermediate · 4 mallets",
