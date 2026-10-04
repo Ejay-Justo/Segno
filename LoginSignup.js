@@ -42,7 +42,7 @@
     const initial = safe(
       (user.name || user.email || "S").trim().charAt(0).toUpperCase(),
     );
-    card.innerHTML = `<div class="eyebrow">Your Segno account</div><h2>Your profile.</h2><p class="sub">Your account information is saved in this browser.</p><div class="profile"><div class="profile-top"><div class="avatar">${initial}</div><div><h3>${safe(user.name || "Musician")}</h3><p>Segno Editions member</p></div></div><dl><div><dt>Name</dt><dd>${safe(user.name || "—")}</dd></div><div><dt>Email</dt><dd>${safe(user.email)}</dd></div><div><dt>Member since</dt><dd>${safe(user.joined || "—")}</dd></div></dl></div><div class="profile-actions"><a class="secondary" href="0039JustoMyWebPage.html" style="text-align:center;padding-top:13px">Visit the shop</a><button class="secondary" id="logout" type="button">Log out</button></div>`;
+    card.innerHTML = `<div class="eyebrow">Your Segno account</div><h2>Your profile.</h2><p class="sub">Your account information is saved in this browser.</p><div class="profile"><div class="profile-top"><div class="avatar">${initial}</div><div><h3>${safe(user.name || "Musician")}</h3><p>Segno Editions member</p></div></div><dl><div><dt>Name</dt><dd>${safe(user.name || "—")}</dd></div><div><dt>Email</dt><dd>${safe(user.email)}</dd></div><div><dt>Member since</dt><dd>${safe(user.joined || "—")}</dd></div></dl></div><div class="profile-actions"><a class="secondary" href="index.html" style="text-align:center;padding-top:13px">Visit the shop</a><button class="secondary" id="logout" type="button">Log out</button></div>`;
     document.getElementById("logout").addEventListener("click", () => {
       localStorage.removeItem(SESSION_KEY);
       mode = "login";
