@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#171815" />
+    <title>Segno — Music for the moment</title>
+    <link rel="stylesheet" href="CSS/0039JustoStyle.css" />
+    <script src="JavaScript/LoginSignup.js" defer></script>
+    <script src="JavaScript/0039JustoStyle.js" defer></script>
+    <script src="React/LoggedIn.js" defer></script>
+    <script src="React/Signedup.js" defer></script>
+  </head>
+  <body>
+    <div class="announcement">
+      Thoughtfully written · Made to be played · Instant digital delivery
+    </div>
+    <header>
+      <button class="menu" id="menu" aria-label="Toggle navigation">☰</button
+      ><a class="logo" href="#home">Segno<b>.</b></a>
+      <nav class="nav" id="nav">
+        <a href="#collections">Collections</a><a href="#shop">Sheet music</a
+        ><a href="#about">Our philosophy</a><a href="#inquiries">Inquiries</a>
+      </nav>
+      <div class="right">
+        <div class="social">
+          <a href="https://www.facebook.com/Mobshaker.1" target="_blank" rel="noopener"
+            >Facebook</a
+          ><a href="https://www.instagram.com/mobshaker/?hl=en" target="_blank" rel="noopener"
+            >Instagram</a
+          >
+        </div>
+        <button class="cart-open" id="openCart">
+          Bag <span class="count" id="count">(0)</span>
+        </button>
+        <button class="SignUpLogin" id="SignUpLogin" onclick="window.location.href='LoginSignup.html'">
+          Sign Up / Login
+        </button>
+        <script>
+          const session = getSession();
+          const user = session && session.email ? readUsers()[session.email] : null;
+          if (user) {
+            getElementById("SignUpLogin").style.display = "none"
+            SignUpLogin.button = "Hi, " + user.username;
+          }
+          else {
+            getElementById("SignUpLogin").style.display = "block"
+          }
+        </script>
+      </div>
+    </header>
+    <main>
+      <section class="hero" id="home">
+        <div class="hero-content">
+          <div class="eyebrow" id="eyebrow">Resonance & reflection</div>
+          <h1 id="title">Marimba<br /><em>Scores.</em></h1>
+          <p id="description">
+            Intimate solos and vivid arrangements that let the marimba sing in
+            its own voice.
+          </p>
+          <a class="gold-button" id="heroLink" href="#marimba"
+            >Explore marimba scores ↗</a
+          >
+        </div>
+        <div class="controls">
+          <span id="slideNumber">01</span> / 03
+          <button id="prev" aria-label="Previous slide">←</button
+          ><button id="next" aria-label="Next slide">→</button>
+        </div>
+      </section>
+      <section class="intro" id="about">
+        <div class="eyebrow">A score with a soul</div>
+        <h2>Music made for the way you play.</h2>
+        <p>
+          From the first rehearsal to the final bow, find expressive,
+          performance-ready music crafted for percussionists and the ensembles
+          they call home.
+        </p>
+      </section>
+      <section class="collections" id="collections">
+        <article class="collection">
+          <div class="collection-content">
+            <small>Resonance & reflection</small>
+            <h3>Marimba</h3>
+            <a href="#marimba">Explore scores ↗</a>
+          </div>
+        </article>
+        <article class="collection">
+          <div class="collection-content">
+            <small>Precision in motion</small>
+            <h3>Drumline</h3>
+            <a href="#drumline">Explore scores ↗</a>
+          </div>
+        </article>
+        <article class="collection">
+          <div class="collection-content">
+            <small>Many voices, one pulse</small>
+            <h3>Percussion Ensemble</h3>
+            <a href="#ensemble">Explore scores ↗</a>
+          </div>
+        </article>
+      </section>
+      <section class="shop" id="shop">
+        <div class="shop-head">
+          <div>
+            <div class="eyebrow">The Segno catalogue</div>
+            <h2 id="shopTitle">Music that you come back to.</h2>
+          </div>
+          <input
+            class="search"
+            id="search"
+            type="search"
+            placeholder="Search compositions & arrangements"
+            aria-label="Search scores"
+          />
+        </div>
+        <div class="filters">
+          <button class="filter active" data-filter="all">All scores</button
+          ><button class="filter" data-filter="Marimba">Marimba</button
+          ><button class="filter" data-filter="Drumline">Drumline</button
+          ><button class="filter" data-filter="Percussion Ensemble">
+            Percussion ensemble
+          </button>
+        </div>
+        <div class="products" id="products"></div>
+      </section>
+      <section class="intro" id="inquiries">
+        <div class="eyebrow">Questions & commissions</div>
+        <h2>Let's talk about your music.</h2>
+        <p>
+          Have a question about a score, a custom arrangement, or a performance?
+          Send us a note and we'll get back to you by email.
+        </p>
+        <form
+          action="mailto:justo.ejay.silva1@gmail.com"
+          method="post"
+          enctype="text/plain"
+          style="max-width: 620px; margin: 2rem auto 0; text-align: left;"
+        >
+          <label for="inquiryName">Name</label>
+          <input
+            class="search"
+            id="inquiryName"
+            name="Name"
+            type="text"
+            placeholder="Your name"
+            required
+            style="display: block; width: 100%; margin: 0.5rem 0 1rem;"
+          />
+          <label for="inquiryEmail">Email</label>
+          <input
+            class="search"
+            id="inquiryEmail"
+            name="Email"
+            type="email"
+            placeholder="you@example.com"
+            required
+            style="display: block; width: 100%; margin: 0.5rem 0 1rem;"
+          />
+          <label for="inquiryMessage">Message</label>
+          <textarea
+            class="search"
+            id="inquiryMessage"
+            name="Message"
+            rows="5"
+            placeholder="How can we help?"
+            required
+            style="display: block; width: 100%; margin: 0.5rem 0 1.25rem; resize: vertical;"
+          ></textarea>
+          <button class="gold-button" type="submit">Send inquiry ↗</button>
+        </form>
+      </section>
+      <section class="quote">
+        <div class="eyebrow">The Man behind the music</div>
+        <div class="quote-image">
+          <image src="Images/Gemini_Generated_Image_k4zdtqk4zdtqk4zd.jpg" alt="EjayJusto" />
+        </div>
+        <blockquote>
+          “Music is a language that expresses the emotions, the moment, and the soul of a musician.”
+        </blockquote>
+        <h2><em>—Ejay Justo</em></h2>
+        <div class="eyebrow">Segno Editions · Music for the moment</div>
+      </section>
+    </main>
+    <footer>
+      <a class="logo" href="#home">Segno<b>.</b></a>
+      <p>© 2026 Segno Editions. Music made for musicians.</p>
+      <div class="footer-links">
+        <a href="https://www.facebook.com/Mobshaker.1" target="_blank" rel="noopener"
+          >Facebook</a
+        ><a href="https://www.instagram.com/mobshaker/?hl=en" target="_blank" rel="noopener"
+          >Instagram</a
+        ><a href="#shop">Shop scores</a>
+      </div>
+    </footer>
+    <div class="overlay" id="overlay"></div>
+    <aside class="drawer" id="drawer" aria-label="Shopping bag">
+      <div class="drawer-head">
+        <h2>Your bag <span class="count" id="drawerCount">(0)</span></h2>
+        <button class="close" id="close" aria-label="Close cart">x</button>
+      </div>
+      <div class="items" id="items"></div>
+      <div class="total">
+        <span>Subtotal</span><span id="total">$0.00</span>
+      </div>
+      <button class="checkout" id="checkout">Continue to checkout</button>
+    </aside>
+    <div class="notice" id="notice" role="status"></div>
+  </body>
+</html>
+<!-- Placeholder ang $ sign ng Pesos, will change it -->
